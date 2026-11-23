@@ -4,23 +4,23 @@ using System.Text;
 
 namespace DataStructures
 {
-    public class Queue<T> where T: IComparable<T>
+    public class Queue<T>
     {
-        public SingleLinkedList<T> list;
+        public Vector<T> data;
 
         public Queue()
         {
-            this.list = new SingleLinkedList<T>();
+            this.data = new Vector<T>();
         }
 
         public bool IsEmpty()
         {
-            return this.list.IsEmpty();
+            return this.data.Count != 0;
         }
 
         public void Enqueue(T item)
         {
-            this.list.Insert(item, false);
+            this.data.Append(item);
         }
 
         public T Dequeue()
@@ -30,11 +30,7 @@ namespace DataStructures
                 throw new Exception("Queue is empty.");
             }
 
-            T value = this.list.front!.value;
-
-            this.list.Remove(value);
-
-            return value;
+            return this.data.Pop();
         }
 
         public T Front()
@@ -44,7 +40,7 @@ namespace DataStructures
                 throw new Exception("Queue is empty.");
             }
 
-            return this.list.front!.value;
+            return this.data[-1];
         }
     }
 }

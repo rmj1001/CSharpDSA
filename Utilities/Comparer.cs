@@ -1,4 +1,4 @@
-﻿namespace DataStructures
+﻿namespace DataStructures.Utilities
 {
     public static class Comparer<T>
     {

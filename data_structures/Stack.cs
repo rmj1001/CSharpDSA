@@ -5,23 +5,23 @@ using System.Text;
 
 namespace DataStructures
 {
-    public class Stack<T> where T: IComparable<T>
+    public class Stack<T>
     {
-        public SingleLinkedList<T> list;
+        private Vector<T> data;
 
         public Stack()
         {
-            this.list = new SingleLinkedList<T>();
+            this.data = new Vector<T>();
         }
 
         public bool IsEmpty()
         {
-            return this.list.IsEmpty();
+            return this.data.Count != 0;
         }
 
         public void Push(T item)
         {
-            this.list.Insert(item, true);
+            this.data.InsertAt(0, item);
         }
 
         public T Pop()
@@ -31,9 +31,7 @@ namespace DataStructures
                 throw new Exception("Stack is empty.");
             }
 
-            T value = this.list.front!.value;
-
-            this.list.Remove(value);
+            T value = this.data.Pop(0);
 
             return value;
         }
@@ -45,7 +43,7 @@ namespace DataStructures
                 throw new Exception("Stack is empty.");
             }
 
-            return this.list.front!.value;
+            return this.data[0];
         }
     }
 }
