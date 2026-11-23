@@ -1,9 +1,5 @@
 ﻿using DataStructures.Utilities;
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Text;
 
 namespace DataStructures
 {
@@ -27,12 +23,7 @@ namespace DataStructures
         /// <summary>
         /// Multiply/divide Vector capacity by this when growing/shrinking
         /// </summary>
-        private const int ResizeFactor = 2;
-
-        /// <summary>
-        /// Trigger shrinking if Vector.Capacity / Vector.DecreaseFactor == Vector.Count
-        /// </summary>
-        private const int DecreaseFactor = 4;
+        private const int ResizeBy = 2;
 
         /// <summary>
         /// This is the total possible number of slots the current vector
@@ -50,7 +41,7 @@ namespace DataStructures
         /// This is the number of elements that should be in the vector
         /// in order to trigger automatic shrinking.
         /// </summary>
-        private int DecreaseCapacity { get { return this._capacity / DecreaseFactor; } }
+        private int DecreaseAt { get { return this._capacity / 4; } }
 
         /// <summary>
         /// This gets the index of the last present item in the vector.
@@ -88,7 +79,7 @@ namespace DataStructures
 
             if (start.Length > 0)
             {
-                this._capacity = start.Length * ResizeFactor;
+                this._capacity = start.Length * ResizeBy;
             }
             else
             {
@@ -255,7 +246,7 @@ namespace DataStructures
         /// can be used in other cases.
         /// </summary>
         /// <returns>Duplicated vector</returns>
-        public Vector<T> Duplicate()
+        public virtual Vector<T> Duplicate()
         {
             return this.Slice();
         }
@@ -273,7 +264,7 @@ namespace DataStructures
 
             for (int i = 0; i <= this.LastIndex; i++)
             {
-                if (Comparer<T>.NE(this[i], other[i])) return false;
+                if (Utilities.Comparer<T>.NE(this[i], other[i])) return false;
             }
 
             return true;
@@ -463,7 +454,7 @@ namespace DataStructures
         {
             for (int i = 0; i < this._count; i++)
             {
-                if (Comparer<T>.EQ(this[i], item))
+                if (Utilities.Comparer<T>.EQ(this[i], item))
                 {
                     return i;
                 }
@@ -985,7 +976,7 @@ namespace DataStructures
         {
             if (force || this._count == this._capacity)
             {
-                int new_capacity = this._capacity * ResizeFactor;
+                int new_capacity = this._capacity * ResizeBy;
                 T[] new_arr = new T[new_capacity];
 
                 Vector<T>.CopyArray(this._data, new_arr, this._count);
@@ -1002,9 +993,9 @@ namespace DataStructures
         /// <param name="force">Skip resizing requirements and force the vector to shrink</param>
         private void TryShrink(bool force = false)
         {
-            if (force || this._count <= this.DecreaseCapacity)
+            if (force || this._count <= this.DecreaseAt)
             {
-                int new_capacity = this._capacity / ResizeFactor;
+                int new_capacity = this._capacity / ResizeBy;
 
                 if (new_capacity < 1)
                 {
@@ -1094,10 +1085,10 @@ namespace DataStructures
 
             if (!reverseVec)
             {
-                return vector.SortBy((T first, T second) => Comparer<T>.GT(first, second), reverse: false, inPlace);
+                return vector.SortBy((T first, T second) => Utilities.Comparer<T>.GT(first, second), reverse: false, inPlace);
             }
 
-            return vector.SortBy((T first, T second) => Comparer<T>.LT(first, second), reverse: false, inPlace);
+            return vector.SortBy((T first, T second) => Utilities.Comparer<T>.LT(first, second), reverse: false, inPlace);
         }
     }
 }
